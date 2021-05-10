@@ -4,46 +4,56 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 @Entity
 @Getter
 @Setter
 public class Account {
 
-    @Column
     @Id
     @GeneratedValue
     private long id;
 
-    @Column(length = 20)
     @NotBlank
+    @Size(max=20)
     private String name;
 
-    @Column(length = 30)
+
     @NotBlank
+    @Size(max=30)
     private String nick;
 
-    @Column
-    @Min(10)
+    @Size(min=10)
     @NotBlank
     private String password;
 
-    @Column(length = 20)
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nick='" + nick + '\'' +
+                ", password='" + password + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
+
     @NotBlank
+    @Size(max=20)
     private String phonenumber;
 
-    @Column(length = 100)
+
     @NotBlank
+    @Size(max=100)
+    @Email
     private String email;
 
-    @Column
     private String gender;
 
     @Builder

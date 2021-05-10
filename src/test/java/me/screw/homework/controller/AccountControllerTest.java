@@ -2,27 +2,16 @@ package me.screw.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.screw.homework.domain.Account;
-import me.screw.homework.repository.AccountRepository;
 import me.screw.homework.service.AccountService;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BindingResult;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,10 +31,7 @@ class AccountControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private AccountController accountController;
-
-    @MockBean
-    private BindingResult bindingResult;
+    private AccountService accountService;
 
     @Test
     public void createAccountTest() throws Exception {
@@ -57,13 +43,15 @@ class AccountControllerTest {
                 .phonenumber("01087399737")
                 .gender("male")
                 .build();
+
         String content = objectMapper.writeValueAsString(account);
-        given(this.accountController.createAccount(account, bindingResult))
-                .willReturn(new ResponseEntity<>(account, HttpStatus.OK));
-        mockMvc.perform(post("/account/save")
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        given(this.accountService.createAccount(account))
+                .willReturn(1L);
+        mockMvc.perform(post("/save")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(content))
+
                 .andExpect(status().isOk())
                 .andDo(print());
     }

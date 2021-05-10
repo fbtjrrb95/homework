@@ -6,22 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/account")
 public class AccountController {
 
     @Autowired
     AccountService accountService;
 
-    @PostMapping("/save")
-    public ResponseEntity<Account> createAccount(@Validated Account account, BindingResult bindingResult){
+    @PostMapping(value = "/save")
+    public ResponseEntity<Account> createAccount(@Validated @RequestBody Account account, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for (FieldError error : errors ) {
+                System.out.println (error.getObjectName() + ":" + error.getField() +    " - " + error.getDefaultMessage());
+            }
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         try {
