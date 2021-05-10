@@ -1,7 +1,6 @@
 package me.screw.homework.domain;
 
 import lombok.Builder;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -19,26 +20,39 @@ public class Account {
     @Id
     private long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
+    @NotBlank
     private String name;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
+    @NotBlank
     private String nick;
 
-    @Column(nullable = false)
+    @Column
+    @Min(10)
+    @NotBlank
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
+    @NotBlank
     private String phonenumber;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
+    @NotBlank
     private String email;
 
     @Column
     private String gender;
 
     @Builder
-    public Account(String name, String nick, String password, String phonenumber, String email, String gender){
+    public Account(
+            @NotBlank String name,
+            @NotBlank String nick,
+            @NotBlank String password,
+            @NotBlank String phonenumber,
+            @NotBlank String email,
+            String gender){
+
         this.name = name;
         this.nick = nick;
         this.password = new BCryptPasswordEncoder().encode(password);
