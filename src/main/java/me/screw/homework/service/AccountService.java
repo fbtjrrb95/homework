@@ -15,7 +15,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public long createAccount(Account account){
+    public long createAccount(Account account) throws Exception{
         Account _account = accountRepository.save(account);
         return _account.getId();
     }
