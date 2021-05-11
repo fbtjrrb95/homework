@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/account")
 public class AccountController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class AccountController {
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(account, HttpStatus.OK);
+        return ResponseEntity.ok(account);
     }
 
 }
