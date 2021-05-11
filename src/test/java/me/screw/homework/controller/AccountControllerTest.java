@@ -47,7 +47,7 @@ class AccountControllerTest {
         String content = objectMapper.writeValueAsString(account);
         given(this.accountService.createAccount(account))
                 .willReturn(1L);
-        mockMvc.perform(post("/account/save")
+        mockMvc.perform(post("/signup")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(content))

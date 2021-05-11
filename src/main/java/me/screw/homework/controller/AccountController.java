@@ -1,7 +1,9 @@
 package me.screw.homework.controller;
 
+import lombok.RequiredArgsConstructor;
 import me.screw.homework.domain.Account;
 import me.screw.homework.service.AccountService;
+import me.screw.homework.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/account")
+@RequiredArgsConstructor
 public class AccountController {
 
-    @Autowired
-    AccountService accountService;
+    private final JwtUserDetailsService accountService;
 
-    @PostMapping(value = "/save")
-    public ResponseEntity<Account> createAccount(@Validated @RequestBody Account account, BindingResult bindingResult){
+    @PostMapping("/signup")
+    public ResponseEntity<Account> signup(@Validated @RequestBody Account account, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             List<FieldError> errors = bindingResult.getFieldErrors();
             for (FieldError error : errors ) {
@@ -29,11 +30,13 @@ public class AccountController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         try {
-            accountService.createAccount(account);
+            accountService.save(account);
         }catch (Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return ResponseEntity.ok(account);
     }
+
+
 
 }
