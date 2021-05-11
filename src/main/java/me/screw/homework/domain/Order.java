@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 @Entity(name = "orders")
@@ -20,15 +21,17 @@ public class Order {
     @GeneratedValue
     private long id;
 
-    @Column(length = 12)
+    @Column
+    @Size(max=12)
     @NotBlank
     private String orderNumber;
 
-    @Column(length = 100)
+    @Column
+    @Size(max=100)
     @NotBlank
     private String productName;
 
-//    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-//    @NotBlank
-//    private Timestamp paymentDate;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @NotBlank
+    private Timestamp paymentDate;
 }
