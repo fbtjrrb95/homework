@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,9 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${spring.jwt.secret}")
     private String secret;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //retrieve username from jwt token
     // jwt token으로부터 username을 획득한다.
@@ -73,6 +78,9 @@ public class JwtTokenUtil implements Serializable {
 
     //validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
+        if (redisTemplate.opsForValue().get(token) != null) {
+            return false;
+        }
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

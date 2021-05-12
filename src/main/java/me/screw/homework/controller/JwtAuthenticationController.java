@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/account")
 @CrossOrigin
 public class JwtAuthenticationController {
 
@@ -38,6 +39,7 @@ public class JwtAuthenticationController {
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

@@ -2,7 +2,7 @@ package me.screw.homework.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.screw.homework.domain.Account;
-import me.screw.homework.service.AccountService;
+import me.screw.homework.service.JwtUserDetailsService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-// 왜 public이 사라져야 하는 거지?
 class AccountControllerTest {
 
     @Autowired
@@ -31,7 +30,7 @@ class AccountControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private AccountService accountService;
+    private JwtUserDetailsService accountService;
 
     @Test
     public void createAccountTest() throws Exception {
@@ -45,13 +44,12 @@ class AccountControllerTest {
                 .build();
 
         String content = objectMapper.writeValueAsString(account);
-        given(this.accountService.createAccount(account))
+        given(this.accountService.save(account))
                 .willReturn(1L);
-        mockMvc.perform(post("/signup")
+        mockMvc.perform(post("/account/signup")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(content))
-
                 .andExpect(status().isOk())
                 .andDo(print());
     }
